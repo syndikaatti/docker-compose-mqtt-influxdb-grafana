@@ -14,8 +14,7 @@
  * If you don't change them, you will be sending your
  * data to the example server, at the example topic
  */
-#define MQTT_TOPIC_TUAS        "iothon/tuas1/ruutu1"
-#define MQTT_TOPIC_RSSI        "iothon/myteam/rssi"
+#define MQTT_TOPIC_TUAS        "iothon/1"
 #define MQTT_TOPIC_STATE       "iothon/myteam/status"
 #define MY_SERVER  "10.200.1.1"
 /****************************************************/
