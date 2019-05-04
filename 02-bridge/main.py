@@ -12,7 +12,9 @@ from typing import NamedTuple
 import paho.mqtt.client as mqtt
 from influxdb import InfluxDBClient
 
+import json
 import time
+import os
 
 INFLUXDB_ADDRESS = 'influxdb'
 INFLUXDB_USER = 'root'
@@ -75,10 +77,33 @@ def _send_sensor_data_to_influxdb(sensor_data):
         }
     ]
     print(json_body)
-
+    with open('/tmp/json/parking_locations.json') as locations:
+        locations_body = json.load(locations)
+    for i in locations_body:
+        if i['id'] == json_body['fields']['value']:
+            print('IT WORKS!!')
     influxdb_client.write_points(json_body)
 
+def stede():
+    data = [
+        {"id": 1,
+        "lat": 60.187561,
+        "long": 24.817649,
+        "status": "free"
+        },
+        {"id": 2,
+        "lat": 60.187764,
+        "long": 24.815294,
+        "status": "taken"
+        }
+    ]
 
+    with open('/tmp/json/parking_locations.json', 'w') as fp:
+        json.dump(data, fp)
+
+    with open('/tmp/json/parking_locations.json') as locations:
+        locations_body = json.load(locations)
+        print(locations_body)
 
 def _init_influxdb_database():
     databases = influxdb_client.get_list_database()
@@ -93,6 +118,7 @@ def main():
 
     print('Connecting to the database ' + INFLUXDB_DATABASE)
     _init_influxdb_database()
+    stede()
 
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
     mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
