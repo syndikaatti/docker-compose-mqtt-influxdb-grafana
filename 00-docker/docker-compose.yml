@@ -41,3 +41,10 @@ services:
       - mosquitto
       - influxdb
     restart: always
+
+  parkingboi:
+    build: ../parkingboi
+    container_name: parkingboi
+    restart: always
+    ports:
+      - 5000:5000
