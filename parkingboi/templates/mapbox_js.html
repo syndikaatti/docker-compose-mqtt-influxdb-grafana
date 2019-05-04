@@ -17,7 +17,7 @@
         <div id="map"></div>
         <script>
             L.mapbox.accessToken = '{{ACCESS_KEY}}';
-            var map = L.mapbox.map('map', 'mapbox.streets', {
+            var map = L.mapbox.map('map', 'mapbox.satellite', {
               scrollWheelZoom: false,
               zoomControl: false
             }).setView([60.187784, 24.819122], 17);

@@ -14,7 +14,7 @@
  * If you don't change them, you will be sending your
  * data to the example server, at the example topic
  */
-#define MQTT_TOPIC_TEMPERATURE "iothon/myteam/temperature"
+#define MQTT_TOPIC_TUAS        "iothon/tuas/1"
 #define MQTT_TOPIC_RSSI        "iothon/myteam/rssi"
 #define MQTT_TOPIC_STATE       "iothon/myteam/status"
 #define MY_SERVER  "10.200.1.1"
@@ -38,15 +38,16 @@ const char *MQTT_SERVER   = MY_SERVER;
 const char *MQTT_USER     = "mqttuser";     // NULL for no authentication
 const char *MQTT_PASSWORD = "mqttpassword"; // NULL for no authentication
 
-NB           nbAccess(true); // NB access: use a 'true' parameter to enable debugging
+NB           nbAccess(false); // NB access: use a 'true' parameter to enable debugging
 GPRS         gprsAccess;     // GPRS access
 NBClient     tcpSocket;
 PubSubClient mqttClient(tcpSocket);
 
 void setup() {
   Serial.begin(115200);
-  while (! Serial)
-    ;
+  while (! Serial);
+
+    
 
   Serial.println("MKR NB 1500 MQTT client starting.");
 
@@ -83,10 +84,22 @@ void loop() {
   if (now - lastMsgTime > MQTT_PUBLISH_DELAY) {
     lastMsgTime = now;
 
-    float temperature = readTemperature();
-    mqttPublish(MQTT_TOPIC_TEMPERATURE, temperature);
-    float rssi = readRSSI();
-    mqttPublish(MQTT_TOPIC_RSSI, rssi);
+    // read the input on analog pin 0:
+    int sensorValue = analogRead(A0);
+    // print out the value you read:
+    Serial.print("Read sensor value: ");
+    Serial.println(sensorValue);
+  
+    int distance = analogRead(A0);
+    if(distance < 900){
+      mqttPublish(MQTT_TOPIC_TUAS, 1);
+      Serial.println("Found a car!");
+    }
+
+    // float temperature = readTemperature();
+
+    // float rssi = readRSSI();
+    // mqttPublish(MQTT_TOPIC_RSSI, rssi);
   }
   Serial.println("Looping: delay...");
   delay(1000);
