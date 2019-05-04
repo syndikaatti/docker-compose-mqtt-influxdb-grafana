@@ -73,6 +73,7 @@ def _send_sensor_data_to_influxdb(sensor_data):
             }
         }
     ]
+    print(json_body)
     influxdb_client.write_points(json_body)
 
 

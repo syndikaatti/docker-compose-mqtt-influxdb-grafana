@@ -1,3 +1,4 @@
+#!/usr/bin/python3 
 from geojson import Point, Feature
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import json
@@ -15,7 +16,6 @@ def mapbox_js():
         ACCESS_KEY=MAPBOX_ACCESS_KEY,
         parking_locations=parking_locations)
 
-@app.route('/')
 def get_parking_locations():
     parking_locations = []
     with open("parking_locations.json", "r") as json_data:
@@ -35,5 +35,3 @@ def get_parking_locations():
 # Read data from the database and returns a dict?
 def read_parking_data():
     pass
-
-
