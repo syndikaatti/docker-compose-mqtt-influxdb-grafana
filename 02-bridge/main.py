@@ -80,7 +80,7 @@ def _send_sensor_data_to_influxdb(sensor_data):
     with open('/tmp/json/parking_locations.json') as locations:
         locations_body = json.load(locations)
     for i in locations_body:
-        if i['id'] == json_body['fields']['value']:
+        if i['id'] == json_body['tags']['location']:
             print('IT WORKS!!')
     influxdb_client.write_points(json_body)
 
