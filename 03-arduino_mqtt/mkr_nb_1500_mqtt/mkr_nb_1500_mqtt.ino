@@ -8,6 +8,14 @@
       - PubSubClient
 **/
 
+/**
+  Team:
+  Tuomo Kivekäs
+  Antti Paananen
+  Joonas Maanonen
+  Paavo Pärssinen
+**/
+
 /**************************************************
  * At minimum do change the following.
  *
