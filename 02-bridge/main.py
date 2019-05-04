@@ -43,6 +43,7 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     """The callback for when a PUBLISH message is received from the server."""
+    print('You have a new message!')
     print(msg.topic + ' ' + str(msg.payload))
     sensor_data = _parse_mqtt_message(msg.topic, msg.payload.decode('utf-8'))
     if sensor_data is not None:
@@ -74,7 +75,9 @@ def _send_sensor_data_to_influxdb(sensor_data):
         }
     ]
     print(json_body)
+
     influxdb_client.write_points(json_body)
+
 
 
 def _init_influxdb_database():
