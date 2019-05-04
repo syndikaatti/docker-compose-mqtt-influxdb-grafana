@@ -79,14 +79,13 @@ def _send_sensor_data_to_influxdb(sensor_data):
     print(json_body)
     with open('/tmp/json/parking_locations.json') as locations:
         locations_body = json.load(locations)
+        print(locations_body)
     for i in locations_body:
-        print('id:')
-        print(int(i['id']))
-        print('location:')
-        print(int(json_body[0]['tags']['location']))
-        print('are we here')
         if int(i['id']) == int(json_body[0]['tags']['location']):
-            print('IT WORKS!!')
+            i['status'] = int(json_body[0]['fields']['value'])
+            with open('/tmp/json/parking_locations.json', 'w') as fp:
+                json.dump(locations_body, fp)
+                print('Changed status for ' + str(i['id'])+ str(i['status']))
     influxdb_client.write_points(json_body)
 
 def stede():
@@ -94,12 +93,12 @@ def stede():
         {"id": 1,
         "lat": 60.187561,
         "long": 24.817649,
-        "status": "free"
+        "status": 1
         },
         {"id": 2,
         "lat": 60.187764,
         "long": 24.815294,
-        "status": "taken"
+        "status": 0
         }
     ]
 
@@ -108,7 +107,6 @@ def stede():
 
     with open('/tmp/json/parking_locations.json') as locations:
         locations_body = json.load(locations)
-        print(locations_body)
 
 def _init_influxdb_database():
     databases = influxdb_client.get_list_database()
