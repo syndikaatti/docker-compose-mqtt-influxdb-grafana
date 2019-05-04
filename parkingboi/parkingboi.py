@@ -10,7 +10,7 @@ app = Flask(__name__)
 #MAPBOX_ACCESS_KEY = app.config['MAPBOX_ACCESS_KEY']
 MAPBOX_ACCESS_KEY = os.environ['MAPBOX_ACCESS_KEY']
 
-@app.route('/mapbox_js')
+@app.route('/')
 def mapbox_js():
     parking_locations = get_parking_locations()
     return render_template(
