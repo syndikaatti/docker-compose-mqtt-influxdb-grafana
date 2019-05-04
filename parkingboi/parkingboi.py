@@ -1,0 +1,39 @@
+from geojson import Point, Feature
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+import json
+
+app = Flask(__name__)
+app.config.from_object(__name__)
+app.config.from_envvar('APP_CONFIG_FILE', silent=True)
+MAPBOX_ACCESS_KEY = app.config['MAPBOX_ACCESS_KEY']
+
+@app.route('/mapbox_js')
+def mapbox_js():
+    parking_locations = get_parking_locations()
+    return render_template(
+        'mapbox_js.html',
+        ACCESS_KEY=MAPBOX_ACCESS_KEY,
+        parking_locations=parking_locations)
+
+@app.route('/')
+def get_parking_locations():
+    parking_locations = []
+    with open("parking_locations.json", "r") as json_data:
+        locations = json.load(json_data)
+        for location in locations:
+            point = Point([location['long'], location['lat']])
+            properties = {
+                    'title': location['name'],
+                    'icon' : 'car',
+                    'marker-color': '#3bb2d0',
+                    'marker-symbol' : 666
+            }
+            feature = Feature(geometry = point, properties=properties)
+            parking_locations.append(feature)
+    return parking_locations
+
+# Read data from the database and returns a dict?
+def read_parking_data():
+    pass
+
+
