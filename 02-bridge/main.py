@@ -83,8 +83,9 @@ def _send_sensor_data_to_influxdb(sensor_data):
         print('id:')
         print(int(i['id']))
         print('location:')
-        print(int(json_body['tags']['location']))
-        if int(i['id']) == int(json_body['tags']['location']):
+        print(int(json_body[0]['tags']['location']))
+        print('are we here')
+        if int(i['id']) == int(json_body[0]['tags']['location']):
             print('IT WORKS!!')
     influxdb_client.write_points(json_body)
 
