@@ -20,7 +20,7 @@ def mapbox_js():
 
 def get_parking_locations():
     parking_locations = []
-    with open("../parking_locations.json", "r") as json_data:
+    with open("/tmp/json/parking_locations.json", "r") as json_data:
         locations = json.load(json_data)
         for location in locations:
             point = Point([location['long'], location['lat']])
