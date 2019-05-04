@@ -4,7 +4,7 @@ FOU_REMOTE_PORT=8001
 FOU_REMOTE_IP=195.148.127.95
 
 FOU_LOCAL_PORT=1883
-FOU_LOCAL_IP=195.148.126.126
+FOU_LOCAL_IP=195.148.126.105
 
 FOU_REMOTE_NETWORK="10.200.1.1/24"
 
@@ -22,8 +22,4 @@ ip link add name fou0 type ipip \
 
 ip link set up dev tunl0
 ip link set up dev fou0
-ip addr add $FOU_REMOTE_NETWORK dev fou0
-
-# NAT -- does not work yet?
-
-# sudo iptables -t nat -A POSTROUTING -s 10.200.1.0/24 -o eth0 -j MASQUERADE
+ip addr add 10.200.1.1/24 dev fou0
