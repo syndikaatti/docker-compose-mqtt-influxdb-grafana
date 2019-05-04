@@ -20,15 +20,17 @@ def mapbox_js():
 
 def get_parking_locations():
     parking_locations = []
-    with open("parking_locations.json", "r") as json_data:
+    with open("../parking_locations.json", "r") as json_data:
         locations = json.load(json_data)
         for location in locations:
             point = Point([location['long'], location['lat']])
+            marker_color = "#32CD32"
+            if (location['status'] == 0):
+                 marker_color = "#FF0000"
             properties = {
-                    'title': location['name'],
+                    'title': location['id'],
                     'icon' : 'car',
-                    'marker-color': '#3bb2d0',
-                    'marker-symbol' : 666
+                    'marker-color': marker_color
             }
             feature = Feature(geometry = point, properties=properties)
             parking_locations.append(feature)
