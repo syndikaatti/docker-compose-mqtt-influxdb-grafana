@@ -1,12 +1,14 @@
-#!/usr/bin/python3 
+#!/usr/bin/python3
 from geojson import Point, Feature
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import json
+import os
 
 app = Flask(__name__)
-app.config.from_object(__name__)
-app.config.from_envvar('APP_CONFIG_FILE', silent=True)
-MAPBOX_ACCESS_KEY = app.config['MAPBOX_ACCESS_KEY']
+#app.config.from_object(__name__)
+#app.config.from_envvar('APP_CONFIG_FILE', silent=True)
+#MAPBOX_ACCESS_KEY = app.config['MAPBOX_ACCESS_KEY']
+MAPBOX_ACCESS_KEY = os.environ['MAPBOX_ACCESS_KEY']
 
 @app.route('/mapbox_js')
 def mapbox_js():
@@ -35,3 +37,6 @@ def get_parking_locations():
 # Read data from the database and returns a dict?
 def read_parking_data():
     pass
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
