@@ -14,7 +14,7 @@
  * If you don't change them, you will be sending your
  * data to the example server, at the example topic
  */
-#define MQTT_TOPIC_TUAS        "iothon/tuas/1"
+#define MQTT_TOPIC_TUAS        "iothon/tuas1/ruutu1"
 #define MQTT_TOPIC_RSSI        "iothon/myteam/rssi"
 #define MQTT_TOPIC_STATE       "iothon/myteam/status"
 #define MY_SERVER  "10.200.1.1"
@@ -38,19 +38,14 @@ const char *MQTT_SERVER   = MY_SERVER;
 const char *MQTT_USER     = "mqttuser";     // NULL for no authentication
 const char *MQTT_PASSWORD = "mqttpassword"; // NULL for no authentication
 
-NB           nbAccess(false); // NB access: use a 'true' parameter to enable debugging
+NB           nbAccess(true); // NB access: use a 'true' parameter to enable debugging
 GPRS         gprsAccess;     // GPRS access
 NBClient     tcpSocket;
 PubSubClient mqttClient(tcpSocket);
 
 void setup() {
   Serial.begin(115200);
-  while (! Serial);
-
-    
-
   Serial.println("MKR NB 1500 MQTT client starting.");
-
   Serial.println("Connect: NB-IoT / LTE Cat M1 network (may take several minutes)...");
   while (nbAccess.begin(PIN_NUMBER, APN) != NB_READY) {
     Serial.println("Connect: NB-IoT: failed.  Retrying in 10 seconds.");
@@ -73,34 +68,38 @@ void setup() {
 }
 
 long lastMsgTime = 0;
+int previous = 0;
 
 void loop() {
   Serial.println("Looping: start...");
   if (!mqttClient.loop()) {
-    mqttConnectIfNeeded();
+      mqttConnectIfNeeded();
+  }
+  int sensorValue = analogRead(A0);
+  Serial.print("Read sensor value: ");
+  Serial.println(sensorValue);
+
+  // No car by default
+  int car = 0;
+  if(sensorValue < 900){
+      // By default sensor gives value of 1024 then changes close to zero when
+      // A car enters.
+      car = 1;
   }
 
-  long now = millis();
-  if (now - lastMsgTime > MQTT_PUBLISH_DELAY) {
-    lastMsgTime = now;
-
-    // read the input on analog pin 0:
-    int sensorValue = analogRead(A0);
-    // print out the value you read:
-    Serial.print("Read sensor value: ");
-    Serial.println(sensorValue);
-  
-    int distance = analogRead(A0);
-    if(distance < 900){
-      mqttPublish(MQTT_TOPIC_TUAS, 1);
-      Serial.println("Found a car!");
-    }
-
-    // float temperature = readTemperature();
-
-    // float rssi = readRSSI();
-    // mqttPublish(MQTT_TOPIC_RSSI, rssi);
+  if(car != previous){
+      Serial.println("Value of the sensor changed!");
+      if(car == 1){
+          Serial.println("Car entered the parking spot!");
+          previous = 1;
+          mqttPublish(MQTT_TOPIC_TUAS, 1);
+      }
+      else{
+          Serial.println("Car left the parking spot!");
+          previous = 0;
+      }
   }
+
   Serial.println("Looping: delay...");
   delay(1000);
   Serial.println("Looping: done.");
