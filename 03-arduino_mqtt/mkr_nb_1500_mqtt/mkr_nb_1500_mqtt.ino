@@ -96,6 +96,7 @@ void loop() {
       else{
           Serial.println("Car left the parking spot!");
           previous = 0;
+          mqttPublish(MQTT_TOPIC_TUAS, 0);
       }
   }
 
