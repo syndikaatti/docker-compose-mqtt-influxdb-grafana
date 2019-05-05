@@ -14,7 +14,7 @@
  * If you don't change them, you will be sending your
  * data to the example server, at the example topic
  */
-#define MQTT_TOPIC_TUAS        "iothon/1"
+#define MQTT_TOPIC_TUAS        "iothon/2"
 #define MQTT_TOPIC_STATE       "iothon/myteam/status"
 #define MY_SERVER  "10.200.1.1"
 /****************************************************/
@@ -92,11 +92,13 @@ void loop() {
           Serial.println("Car entered the parking spot!");
           previous = 1;
           mqttPublish(MQTT_TOPIC_TUAS, 1);
+          delay(5000);
       }
       else{
           Serial.println("Car left the parking spot!");
           previous = 0;
           mqttPublish(MQTT_TOPIC_TUAS, 0);
+          delay(5000);
       }
   }
 
