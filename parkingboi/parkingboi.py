@@ -42,6 +42,10 @@ class FreeParkingLocations(Resource):
             return "No free parking locations found :("
         return free
 
+class MapParkingLocations(Resource):
+    def get(self):
+        return get_parking_locations()
+
 def get_data_json(path):
     with open(path, "r") as json_data:
         locations = json.load(json_data)
@@ -70,6 +74,7 @@ def get_parking_locations():
 api.add_resource(ParkingLocations, '/locations')
 api.add_resource(SingleParkingLocation, '/location/<int:location_id>')
 api.add_resource(FreeParkingLocations, '/locations/free')
+api.add_resource(MapParkingLocations, '/maplocations')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
