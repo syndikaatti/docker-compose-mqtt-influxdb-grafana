@@ -88,7 +88,7 @@ def _send_sensor_data_to_influxdb(sensor_data):
                 print('Changed status for ' + str(i['id'])+ str(i['status']))
     influxdb_client.write_points(json_body)
 
-def stede():
+'''def stede():
     data = [
         {"id": 1,
         "lat": 60.187561,
@@ -106,7 +106,7 @@ def stede():
         json.dump(data, fp)
 
     with open('/tmp/json/parking_locations.json') as locations:
-        locations_body = json.load(locations)
+        locations_body = json.load(locations)'''
 
 def _init_influxdb_database():
     databases = influxdb_client.get_list_database()
@@ -121,7 +121,7 @@ def main():
 
     print('Connecting to the database ' + INFLUXDB_DATABASE)
     _init_influxdb_database()
-    stede()
+    #stede()
 
     mqtt_client = mqtt.Client(MQTT_CLIENT_ID)
     mqtt_client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
