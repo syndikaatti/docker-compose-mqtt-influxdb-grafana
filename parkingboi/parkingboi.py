@@ -53,11 +53,13 @@ def get_parking_locations():
     for location in locations:
         point = Point([location['long'], location['lat']])
         marker_color = "#32CD32"
+        marker_symbol = 'parking'
         if (location['status'] == 0):
              marker_color = "#FF0000"
+             marker_symbol = 'car'
         properties = {
                 'title': location['id'],
-                'icon' : 'car',
+                'marker-symbol': marker_symbol,
                 'marker-color': marker_color
         }
         feature = Feature(geometry = point, properties=properties)
