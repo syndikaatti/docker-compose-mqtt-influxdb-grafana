@@ -31,6 +31,17 @@ class SingleParkingLocation(Resource):
                 return location
         return "Data point not found", 404
 
+class FreeParkingLocations(Resource):
+    def get(self):
+        locations = get_data_json(LOCATIONSPATH)
+        free = []
+        for location in locations:
+            if location['status'] == 0:
+                free.append(location)
+        if len(locations) == 0:
+            return "No free parking locations found :("
+        return free
+
 def get_data_json(path):
     with open(path, "r") as json_data:
         locations = json.load(json_data)
@@ -56,6 +67,7 @@ def get_parking_locations():
 # Add all the rest api paths
 api.add_resource(ParkingLocations, '/locations')
 api.add_resource(SingleParkingLocation, '/location/<int:location_id>')
+api.add_resource(FreeParkingLocations, '/locations/free')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
