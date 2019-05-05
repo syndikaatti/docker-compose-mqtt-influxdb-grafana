@@ -8,7 +8,7 @@ import os
 app = Flask(__name__)
 api = Api(app)
 MAPBOX_ACCESS_KEY = os.environ['MAPBOX_ACCESS_KEY']
-LOCATIONSPATH = "/tmp/json/parkinglocations.json"
+LOCATIONSPATH = "/tmp/json/parking_locations.json"
 
 @app.route('/')
 def mapbox_js():
@@ -22,12 +22,12 @@ def mapbox_js():
 class ParkingLocations(Resource):
     def get(self):
         with open(LOCATIONSPATH, "r") as json_data:
-            locations = json.load()
+            locations = json.load(json_data)
         return locations
 
 def get_parking_locations():
     parking_locations = []
-    with open("/tmp/json/parking_locations.json", "r") as json_data:
+    with open(LOCATIONSPATH, "r") as json_data:
         locations = json.load(json_data)
         for location in locations:
             point = Point([location['long'], location['lat']])
