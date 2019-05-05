@@ -84,7 +84,7 @@ def _send_sensor_data_to_influxdb(sensor_data):
             if int(i['id']) == int(json_body[0]['tags']['location']):
                 i['status'] = int(json_body[0]['fields']['value'])
                 timestamp = time.strftime('%H:%M')
-                i['timestamp'] = time
+                i['timestamp'] = timestamp
                 with open('/tmp/json/parking_locations.json', 'w') as fp:
                     json.dump(locations_body, fp)
                     print('Changed status for ' + str(i['id'])+ str(i['status']))
