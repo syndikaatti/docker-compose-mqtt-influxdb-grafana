@@ -81,13 +81,14 @@ def _send_sensor_data_to_influxdb(sensor_data):
         locations_body = json.load(locations)
         print(locations_body)
     for i in locations_body:
-        if int(i['id']) == int(json_body[0]['tags']['location']):
-            i['status'] = int(json_body[0]['fields']['value'])
-            timestamp = time.strftime('%H:%M')
-            i['timestamp'] = time
-            with open('/tmp/json/parking_locations.json', 'w') as fp:
-                json.dump(locations_body, fp)
-                print('Changed status for ' + str(i['id'])+ str(i['status']))
+        if int(json_body[0]['measurment']) == 615:
+            if int(i['id']) == int(json_body[0]['tags']['location']):
+                i['status'] = int(json_body[0]['fields']['value'])
+                timestamp = time.strftime('%H:%M')
+                i['timestamp'] = time
+                with open('/tmp/json/parking_locations.json', 'w') as fp:
+                    json.dump(locations_body, fp)
+                    print('Changed status for ' + str(i['id'])+ str(i['status']))
     influxdb_client.write_points(json_body)
 
 def _init_influxdb_database():
