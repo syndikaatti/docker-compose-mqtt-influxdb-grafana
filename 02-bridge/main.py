@@ -79,9 +79,8 @@ def _send_sensor_data_to_influxdb(sensor_data):
     print(json_body)
     with open('/tmp/json/parking_locations.json') as locations:
         locations_body = json.load(locations)
-        print(locations_body)
     for i in locations_body:
-        if int(json_body[0]['measurment']) == 615:
+        if int(json_body[0]['measurement']) == 615:
             if int(i['id']) == int(json_body[0]['tags']['location']):
                 i['status'] = int(json_body[0]['fields']['value'])
                 timestamp = time.strftime('%H:%M')
