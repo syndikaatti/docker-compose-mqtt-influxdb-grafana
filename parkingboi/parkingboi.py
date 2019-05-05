@@ -21,30 +21,41 @@ def mapbox_js():
 
 class ParkingLocations(Resource):
     def get(self):
-        with open(LOCATIONSPATH, "r") as json_data:
-            locations = json.load(json_data)
-        return locations
+        return get_data_json(LOCATIONSPATH)
+
+class SingleParkingLocation(Resource):
+    def get(self, location_id):
+        locations = get_data_json(LOCATIONSPATH)
+        for location in locations:
+            if location['id'] == location_id:
+                return location
+        return "Data point not found", 404
+
+def get_data_json(path):
+    with open(path, "r") as json_data:
+        locations = json.load(json_data)
+    return locations
 
 def get_parking_locations():
     parking_locations = []
-    with open(LOCATIONSPATH, "r") as json_data:
-        locations = json.load(json_data)
-        for location in locations:
-            point = Point([location['long'], location['lat']])
-            marker_color = "#32CD32"
-            if (location['status'] == 0):
-                 marker_color = "#FF0000"
-            properties = {
-                    'title': location['id'],
-                    'icon' : 'car',
-                    'marker-color': marker_color
-            }
-            feature = Feature(geometry = point, properties=properties)
-            parking_locations.append(feature)
+    locations = get_data_json(LOCATIONSPATH)
+    for location in locations:
+        point = Point([location['long'], location['lat']])
+        marker_color = "#32CD32"
+        if (location['status'] == 0):
+             marker_color = "#FF0000"
+        properties = {
+                'title': location['id'],
+                'icon' : 'car',
+                'marker-color': marker_color
+        }
+        feature = Feature(geometry = point, properties=properties)
+        parking_locations.append(feature)
     return parking_locations
 
 # Add all the rest api paths
 api.add_resource(ParkingLocations, '/locations')
+api.add_resource(SingleParkingLocation, '/location/<int:location_id>')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
